@@ -1,3 +1,96 @@
+/* Award Announcement Section */
+.award-announcement {
+  background: linear-gradient(120deg, #FFD700 60%, #fff7e6 100%);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #FFD70033;
+  max-width: 900px;
+  margin: 2rem auto 2rem auto;
+  padding: 2rem 1rem 2.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.award-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+.award-image-wrap {
+  flex: 1 1 320px;
+  max-width: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.award-img {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px #bfa06a44;
+  object-fit: cover;
+}
+.award-details {
+  flex: 2 1 340px;
+  text-align: left;
+  color: #3d2c1a;
+  max-width: 420px;
+}
+.award-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d1a00;
+  margin-bottom: 0.7rem;
+  letter-spacing: 1px;
+}
+.award-desc {
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  color: #3d2c1a;
+}
+.award-highlight {
+  color: #D32F2F;
+  font-weight: 700;
+  background: #FFD70044;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+.award-cta {
+  background: linear-gradient(90deg, #bfa06a 60%, #FFD700 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #FFD70033;
+  transition: background 0.2s, transform 0.2s;
+}
+.award-cta:hover {
+  background: linear-gradient(90deg, #FFD700 60%, #bfa06a 100%);
+  color: #3d2c1a;
+  transform: scale(1.04);
+}
+@media (max-width: 900px) {
+  .award-announcement {
+    margin: 2rem 1rem 2rem 1rem;
+  }
+  .award-content {
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+  }
+  .award-details {
+    text-align: center;
+    max-width: 98vw;
+  }
+  .award-img {
+    max-width: 98vw;
+  }
+}
 /* Slideshow Styles */
 .trust-slideshow {
   margin: 2rem auto 2.5rem auto;
@@ -107,6 +200,15 @@
   text-align: center;
   color: #fff;
 }
+.about-header {
+    align-content: center;
+}
+.about-icon {
+    width: 64px;
+    margin: 0 auto 0.5rem auto;
+    filter: drop-shadow(0 2px 8px #0004);
+}
+
 .summit-title {
   font-family: 'Montserrat', Arial, sans-serif;
   font-size: 2.5rem;
