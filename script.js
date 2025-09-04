@@ -54,32 +54,107 @@ if (backToFormBtn) {
     formErrorDiv.textContent = '';
   });
 }
-// Dynamic course selection and fee calculation
-const courseCheckboxes = document.querySelectorAll('.course-card input[type="checkbox"]');
+// Modern course selection functionality
+const courseCards = document.querySelectorAll('.course-card');
 const selectedCoursesDiv = document.getElementById('selectedCourses');
 const totalFeeSpan = document.getElementById('totalFee');
 let selectedCourses = [];
 
-function updateSelectedCourses() {
-  selectedCourses = [];
-  let total = 0;
+function updateSelectedCoursesDisplay() {
   selectedCoursesDiv.innerHTML = '';
-  courseCheckboxes.forEach(cb => {
-    if (cb.checked) {
-      selectedCourses.push({ name: cb.value, fee: parseInt(cb.dataset.fee) });
-      total += parseInt(cb.dataset.fee);
-      const courseLabel = document.createElement('span');
-      courseLabel.textContent = `${cb.value} (GH₵${cb.dataset.fee})`;
-      courseLabel.className = 'selected-course-label';
-      selectedCoursesDiv.appendChild(courseLabel);
+  selectedCoursesDiv.className = 'modern-selected-courses';
+  
+  if (selectedCourses.length === 0) {
+    const emptyMsg = document.createElement('span');
+    emptyMsg.textContent = 'No courses selected yet';
+    emptyMsg.className = 'empty-selection-msg';
+    selectedCoursesDiv.appendChild(emptyMsg);
+  } else {
+    selectedCourses.forEach((course, index) => {
+      const chip = document.createElement('div');
+      chip.className = 'modern-course-chip';
+      chip.innerHTML = `
+        <span>${course.name} (GH₵${course.fee})</span>
+        <span class="chip-remove" data-index="${index}">×</span>
+      `;
+      selectedCoursesDiv.appendChild(chip);
+    });
+  }
+  
+  // Update total fee
+  const total = selectedCourses.reduce((sum, course) => sum + course.fee, 0);
+  totalFeeSpan.textContent = `GH₵${total}`;
+  
+  // Add event listeners to remove buttons
+  document.querySelectorAll('.chip-remove').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const index = parseInt(btn.dataset.index);
+      removeCourse(selectedCourses[index].name);
+    });
+  });
+}
+
+function addCourse(courseName, courseFee) {
+  if (!selectedCourses.find(c => c.name === courseName)) {
+    selectedCourses.push({ name: courseName, fee: courseFee });
+    updateSelectedCoursesDisplay();
+    updateCourseCardState(courseName, true);
+  }
+}
+
+function removeCourse(courseName) {
+  selectedCourses = selectedCourses.filter(c => c.name !== courseName);
+  updateSelectedCoursesDisplay();
+  updateCourseCardState(courseName, false);
+}
+
+function updateCourseCardState(courseName, isSelected) {
+  const card = document.querySelector(`[data-course="${courseName}"]`);
+  if (card) {
+    const btn = card.querySelector('.course-select-btn');
+    const btnText = btn.querySelector('.btn-text');
+    const btnIcon = btn.querySelector('.btn-icon');
+    
+    if (isSelected) {
+      card.classList.add('selected');
+      btnText.textContent = 'Select';
+      btnIcon.textContent = '✓';
+    } else {
+      card.classList.remove('selected');
+      btnText.textContent = 'Select Course';
+      btnIcon.textContent = '+';
+    }
+  }
+}
+
+// Add click event listeners to course cards
+courseCards.forEach(card => {
+  const selectBtn = card.querySelector('.course-select-btn');
+  const courseName = card.dataset.course;
+  const courseFee = parseInt(card.dataset.fee);
+  
+  selectBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isSelected = selectedCourses.find(c => c.name === courseName);
+    
+    if (isSelected) {
+      removeCourse(courseName);
+    } else {
+      addCourse(courseName, courseFee);
     }
   });
-  totalFeeSpan.textContent = `GH₵${total}`;
-}
-courseCheckboxes.forEach(cb => {
-  cb.addEventListener('change', updateSelectedCourses);
+  
+  // Also allow clicking the entire card
+  card.addEventListener('click', (e) => {
+    if (!e.target.closest('.course-select-btn')) {
+      selectBtn.click();
+    }
+  });
 });
-updateSelectedCourses();
+
+// Initialize display
+updateSelectedCoursesDisplay();
 
 // Registration form logic
 const registrationForm = document.getElementById('registrationForm');
