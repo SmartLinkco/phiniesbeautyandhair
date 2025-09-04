@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boss Up 4 Less – 3rd Edition | Phinies Beauty & Hair</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="hero-summit">
+    <div class="hero-bg-img"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-summit-content">
+      <h1 class="summit-title">Boss Up 4 Less <span class="edition">3rd Edition</span></h1>
+      <h2 class="summit-subtitle">Learn lash, brow, and tint techniques at discounted rates with amazing rewards.</h2>
+      <div class="summit-details">
+        <span class="summit-date">15th – 27th September</span>
+        <span class="summit-venue">East Legon Bawaleshie</span>
+      </div>
+      <div class="summit-countdown">
+        <div class="countdown-label">Countdown to Event</div>
+        <div class="countdown-timer">
+          <div class="countdown-segment"><span id="days">00</span><div class="countdown-text">Days</div></div>
+          <div class="countdown-segment"><span id="hours">00</span><div class="countdown-text">Hours</div></div>
+          <div class="countdown-segment"><span id="minutes">00</span><div class="countdown-text">Minutes</div></div>
+          <div class="countdown-segment"><span id="seconds">00</span><div class="countdown-text">Seconds</div></div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="about">
+      <h2>About the Event</h2>
+      <p>Lash bed, skin care products, lash and brow start up kits and many more to be won. Do you think you can be the best student?</p>
+      <ul class="benefits">
+        <li>Lash bed</li>
+        <li>Skincare products</li>
+        <li>Startup kits</li>
+        <li>Prizes for best student</li>
+      </ul>
+    </section>
+
+    <section class="trust-slideshow">
+      <h2 class="slideshow-title">See Highlights from Previous Editions</h2>
+      <div class="slideshow-container">
+        <div class="slideshow-images">
+          <img src="assets/tutorials session.jpg" alt="Boss Up 4 Less Edition 1" class="slide active">
+          <img src="assets/yellow lady.jpg" alt="Boss Up 4 Less Edition 2" class="slide">
+          <img src="assets/phinies.jpg" alt="Boss Up 4 Less Edition 3" class="slide">
+        </div>
+        <div class="slideshow-controls">
+          <button class="slide-btn" id="prevSlide">&#10094;</button>
+          <button class="slide-btn" id="nextSlide">&#10095;</button>
+        </div>
+      </div>
+    </section>
+    <section class="courses">
+      <h2>Our Courses</h2>
+      <div class="course-cards">
+        <div class="course-card" data-fee="1000">
+          <img src="https://img.icons8.com/ios-filled/100/FFD700/eyelash.png" alt="Lash Extension">
+          <h3>Lash Extension</h3>
+          <p>Classic, Hybrid, Volume, Mega Volume & more</p>
+          <span class="fee">GH₵1,000</span>
+          <label><input type="checkbox" name="course" value="Lash Extension" data-fee="1000"> Select</label>
+        </div>
+        <div class="course-card" data-fee="1300">
+          <img src="https://img.icons8.com/ios-filled/100/FFD700/eyebrow.png" alt="Brows">
+          <h3>Brows</h3>
+          <p>Microblading, Microshading, Combo Brows</p>
+          <span class="fee">GH₵1,300</span>
+          <label><input type="checkbox" name="course" value="Brows" data-fee="1300"> Select</label>
+        </div>
+        <div class="course-card" data-fee="950">
+          <img src="https://img.icons8.com/ios-filled/100/FFD700/paint-brush.png" alt="Tint & Lamination">
+          <h3>Tint & Lamination</h3>
+          <p>All methods</p>
+          <span class="fee">GH₵950</span>
+          <label><input type="checkbox" name="course" value="Tint & Lamination" data-fee="950"> Select</label>
+        </div>
+      </div>
+    </section>
+    <section class="registration">
+      <h2>Register Now</h2>
+      <form id="registrationForm">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label>Preferred Course(s)</label>
+          <div id="selectedCourses" class="selected-courses-display"></div>
+        </div>
+        <div id="formError" class="error-message"></div>
+        <div class="form-group">
+          <label for="paymentMethod">Preferred Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" required>
+            <option value="">Select</option>
+            <option value="Mobile Money">Mobile Money</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Cash">Cash</option>
+          </select>
+        </div>
+        <div class="form-group total-fee">
+          <label>Total Fees:</label>
+          <span id="totalFee">GH₵0</span>
+        </div>
+        <button type="submit" class="register-btn">Register</button>
+      </form>
+      <div id="paymentInstructions" class="hidden"></div>
+      <form id="confirmationForm" class="hidden">
+        <div class="form-group">
+          <label for="transactionId">Transaction ID</label>
+          <input type="text" id="transactionId" name="transactionId" required>
+        </div>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <button type="button" id="backToFormBtn" class="register-btn" style="background: #e7cfa7; color: #3d2c1a;">Back</button>
+          <button type="submit" class="confirm-btn">Confirm Payment</button>
+        </div>
+      </form>
+      <div id="confirmationStatus" class="hidden"></div>
+    </section>
+  </main>
+  <footer>
+    <div class="sponsors">
+      <img src="https://i.imgur.com/1QwQwQw.png" alt="Phinies Beauty & Hair" title="Phinies Beauty & Hair">
+      <img src="https://i.imgur.com/2WwWwWw.png" alt="Lyks Gadget Shop" title="Lyks Gadget Shop">
+      <img src="https://i.imgur.com/3EeEeEe.png" alt="Bih" title="Bih">
+      <img src="https://i.imgur.com/4AaAaAa.png" alt="NinaBelle" title="NinaBelle">
+      <img src="https://i.imgur.com/5YyYyYy.png" alt="CY" title="CY">
+    </div>
+    <div class="footer-info">
+      <span>@phiniesbeautyandhair</span> | <span>0546862331</span>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
