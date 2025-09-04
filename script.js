@@ -90,40 +90,65 @@ const paymentMethodSelect = document.getElementById('paymentMethod');
 const formErrorDiv = document.getElementById('formError');
 
 registrationForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  formErrorDiv.style.display = 'none';
-  formErrorDiv.textContent = '';
-  if (selectedCourses.length === 0) {
-    formErrorDiv.textContent = 'Please select at least one course.';
-    formErrorDiv.style.display = 'block';
-    return;
-  }
-  const paymentMethod = paymentMethodSelect.value;
-  if (!paymentMethod) {
-    formErrorDiv.textContent = 'Please select a payment method.';
-    formErrorDiv.style.display = 'block';
-    return;
-  }
-  let instructions = '';
-  if (paymentMethod === 'Mobile Money') {
-    instructions = `<strong>Mobile Money Payment:</strong><br>
-      <b>Number:</b> 0245950898<br>
-      <b>Name:</b> PHINES empire<br>
-      <b>Business Number:</b> 0546862331<br>
-      After payment, enter your transaction ID below.`;
-  } else if (paymentMethod === 'Bank Transfer') {
-    instructions = `<strong>Bank Transfer Payment:</strong><br>
-      <b>Account Number:</b> 9040012371572<br>
-      <b>Bank:</b> Stanbic Bank<br>
-      <b>Branch:</b> Spintex branch<br>
-      After payment, enter your transaction ID below.`;
-  } else if (paymentMethod === 'Cash') {
-    instructions = `<strong>Cash Payment:</strong><br>Contact <b>0546862331</b> to arrange in-person payment.<br>After payment, enter your transaction ID below.`;
-  }
-  paymentInstructionsDiv.innerHTML = instructions;
-  paymentInstructionsDiv.classList.remove('hidden');
-  confirmationForm.classList.remove('hidden');
-  registrationForm.classList.add('hidden');
+    e.preventDefault();
+    formErrorDiv.style.display = 'none';
+    formErrorDiv.textContent = '';
+    if (selectedCourses.length === 0) {
+        formErrorDiv.textContent = 'Please select at least one course.';
+        formErrorDiv.style.display = 'block';
+        return;
+    }
+    const paymentMethod = paymentMethodSelect.value;
+    if (!paymentMethod) {
+        formErrorDiv.textContent = 'Please select a payment method.';
+        formErrorDiv.style.display = 'block';
+        return;
+    }
+    
+    const totalAmount = totalFeeSpan.textContent;
+    let instructions = '';
+    
+    if (paymentMethod === 'Mobile Money') {
+        instructions = `<strong>Mobile Money Payment Instructions:</strong><br><br>
+            <b>Amount to Pay:</b> ${totalAmount}<br><br>
+            <b>Step 1:</b> Dial *170# on your mobile phone<br>
+            <b>Step 2:</b> Select "Send Money" option<br>
+            <b>Step 3:</b> Enter recipient number: <b>0245950898</b><br>
+            <b>Step 4:</b> Enter amount: <b>${totalAmount.replace('GH₵', '')}</b><br>
+            <b>Step 5:</b> Enter your PIN to confirm<br>
+            <b>Step 6:</b> You will receive a confirmation SMS with transaction ID<br><br>
+            <b>Recipient Name:</b> PHINES empire<br>
+            <b>Business Number:</b> 0546862331<br><br>
+            <b>Important:</b> After successful payment, copy the transaction ID from your SMS and enter it below.`;
+    } else if (paymentMethod === 'Bank Transfer') {
+        instructions = `<strong>Bank Transfer Payment Instructions:</strong><br><br>
+            <b>Amount to Pay:</b> ${totalAmount}<br><br>
+            <b>Step 1:</b> Visit your nearest Stanbic Bank branch or use mobile banking<br>
+            <b>Step 2:</b> Request to transfer money to the account below<br>
+            <b>Step 3:</b> Provide the following details:<br>
+            &nbsp;&nbsp;• <b>Account Number:</b> 9040012371572<br>
+            &nbsp;&nbsp;• <b>Bank:</b> Stanbic Bank<br>
+            &nbsp;&nbsp;• <b>Branch:</b> Spintex branch<br>
+            &nbsp;&nbsp;• <b>Amount:</b> ${totalAmount.replace('GH₵', '')}<br>
+            <b>Step 4:</b> Complete the transfer and collect your receipt<br>
+            <b>Step 5:</b> Note the transaction reference number on your receipt<br><br>
+            <b>Important:</b> After successful transfer, enter the transaction reference number from your receipt below.`;
+    } else if (paymentMethod === 'Cash') {
+        instructions = `<strong>Cash Payment Instructions:</strong><br><br>
+            <b>Amount to Pay:</b> ${totalAmount}<br><br>
+            <b>Step 1:</b> Call <b>0546862331</b> to schedule an appointment<br>
+            <b>Step 2:</b> Arrange a convenient time and location for payment<br>
+            <b>Step 3:</b> Bring the exact amount: <b>${totalAmount}</b><br>
+            <b>Step 4:</b> Meet with our representative at the agreed location<br>
+            <b>Step 5:</b> Make payment and collect your receipt<br>
+            <b>Step 6:</b> Note the receipt number for your records<br><br>
+            <b>Contact:</b> 0546862331<br><br>
+            <b>Important:</b> After payment, enter the receipt number provided by our representative below.`;
+    }
+    paymentInstructionsDiv.innerHTML = instructions;
+    paymentInstructionsDiv.classList.remove('hidden');
+    confirmationForm.classList.remove('hidden');
+    registrationForm.classList.add('hidden');
 });
 
 confirmationForm.addEventListener('submit', function(e) {

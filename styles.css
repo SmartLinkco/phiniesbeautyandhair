@@ -548,7 +548,7 @@ main {
   font-weight: bold;
 }
 footer {
-  background: #e7cfa7;
+  background: linear-gradient(135deg, #e68f1c 0%, #f4a944 100%);
   padding: 1.2rem 0 0.5rem 0;
   text-align: center;
   border-top-left-radius: 24px;
