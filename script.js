@@ -27,7 +27,6 @@ document.querySelector('.slideshow-container').addEventListener('mouseenter', ()
 document.querySelector('.slideshow-container').addEventListener('mouseleave', () => slideInterval = setInterval(nextSlide, 4000));
 
 // Countdown Timer Implementation
-// Set your event date/time here (e.g., September 15, 2025, 09:00:00)
 const eventDate = new Date('2025-09-15T09:00:00');
 function updateCountdown() {
   const now = new Date();
@@ -44,18 +43,6 @@ function updateCountdown() {
 }
 setInterval(updateCountdown, 1000);
 updateCountdown();
-
-// Back button logic for payment confirmation
-const backToFormBtn = document.getElementById('backToFormBtn');
-if (backToFormBtn) {
-  backToFormBtn.addEventListener('click', function() {
-    paymentInstructionsDiv.classList.add('hidden');
-    confirmationForm.classList.add('hidden');
-    registrationForm.classList.remove('hidden');
-    formErrorDiv.style.display = 'none';
-    formErrorDiv.textContent = '';
-  });
-}
 
 // Modern course selection functionality
 const courseCards = document.querySelectorAll('.course-card');
@@ -87,6 +74,9 @@ function updateSelectedCoursesDisplay() {
   // Update total fee
   const total = selectedCourses.reduce((sum, course) => sum + course.fee, 0);
   totalFeeSpan.textContent = `GH₵${total}`;
+  
+  // Update payment instructions when courses change
+  updatePaymentInstructions();
   
   // Add event listeners to remove buttons
   document.querySelectorAll('.chip-remove').forEach(btn => {
@@ -139,7 +129,6 @@ function updateCourseCardState(courseName, isSelected) {
 function updateCourseSelection() {
   const coursesValue = selectedCourses.map(c => c.name).join(',');
   document.getElementById('coursesInput').value = coursesValue;
-  document.getElementById('confirmCourses').value = coursesValue;
 }
 
 // Function to update total fee in hidden field
@@ -147,7 +136,142 @@ function updateTotalFee() {
   const total = selectedCourses.reduce((sum, course) => sum + course.fee, 0);
   totalFeeSpan.textContent = `GH₵${total}`;
   document.getElementById('totalFeeInput').value = total;
-  document.getElementById('confirmTotalFee').value = total;
+  
+  // Update payment instructions when total changes
+  updatePaymentInstructions();
+}
+
+// Function to update payment instructions based on selected payment method
+function updatePaymentInstructions() {
+  const paymentMethod = document.getElementById('paymentMethod').value;
+  const totalAmount = totalFeeSpan.textContent;
+  const instructionsDiv = document.getElementById('paymentInstructions');
+  
+  if (!paymentMethod || selectedCourses.length === 0) {
+    instructionsDiv.classList.add('hidden');
+    return;
+  }
+  
+  let instructions = '';
+  
+  if (paymentMethod === 'Mobile Money') {
+    instructions = `
+      <div class="payment-instructions">
+        <h3><span class="instruction-icon">📱</span> Mobile Money Payment Instructions</h3>
+        <div class="instruction-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <p>Dial <strong>*170#</strong> on your mobile phone</p>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <p>Select <strong>"Send Money"</strong> option</p>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <p>Enter recipient number: <strong class="highlight">0245950898</strong></p>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <p>Enter amount: <strong class="highlight">${totalAmount.replace('GH₵', '')}</strong></p>
+          </div>
+          <div class="step">
+            <span class="step-number">5</span>
+            <p>Enter your <strong>PIN</strong> to confirm</p>
+          </div>
+          <div class="step">
+            <span class="step-number">6</span>
+            <p>You will receive a confirmation SMS with <strong>Transaction ID</strong></p>
+          </div>
+        </div>
+        <div class="payment-details">
+          <p><strong>Recipient Name:</strong> PHINES empire</p>
+          <p><strong>Business Number:</strong> 0546862331</p>
+        </div>
+        <div class="instruction-note">
+          <strong>Important:</strong> After successful payment, copy the Transaction ID from your SMS and enter it in the field below before submitting your registration.
+        </div>
+      </div>
+    `;
+  } else if (paymentMethod === 'Bank Transfer') {
+    instructions = `
+      <div class="payment-instructions">
+        <h3><span class="instruction-icon">🏦</span> Bank Transfer Payment Instructions</h3>
+        <div class="instruction-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <p>Visit your nearest Stanbic Bank branch or use mobile banking</p>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <p>Request to transfer money to the account below</p>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <p>Provide the following details:</p>
+            <ul>
+              <li><strong>Account Number:</strong> <span class="highlight">9040012371572</span></li>
+              <li><strong>Bank:</strong> Stanbic Bank</li>
+              <li><strong>Branch:</strong> Spintex branch</li>
+              <li><strong>Amount:</strong> <span class="highlight">${totalAmount.replace('GH₵', '')}</span></li>
+            </ul>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <p>Complete the transfer and collect your receipt</p>
+          </div>
+          <div class="step">
+            <span class="step-number">5</span>
+            <p>Note the <strong>Transaction Reference Number</strong> on your receipt</p>
+          </div>
+        </div>
+        <div class="instruction-note">
+          <strong>Important:</strong> After successful transfer, enter the Transaction Reference Number from your receipt in the field below before submitting your registration.
+        </div>
+      </div>
+    `;
+  } else if (paymentMethod === 'Cash') {
+    instructions = `
+      <div class="payment-instructions">
+        <h3><span class="instruction-icon">💵</span> Cash Payment Instructions</h3>
+        <div class="instruction-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <p>Call <strong class="highlight">0546862331</strong> to schedule an appointment</p>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <p>Arrange a convenient time and location for payment</p>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <p>Bring the exact amount: <strong class="highlight">${totalAmount}</strong></p>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <p>Meet with our representative at the agreed location</p>
+          </div>
+          <div class="step">
+            <span class="step-number">5</span>
+            <p>Make payment and collect your receipt</p>
+          </div>
+          <div class="step">
+            <span class="step-number">6</span>
+            <p>Note the <strong>Receipt Number</strong> for your records</p>
+          </div>
+        </div>
+        <div class="payment-details">
+          <p><strong>Contact:</strong> 0546862331</p>
+        </div>
+        <div class="instruction-note">
+          <strong>Important:</strong> After payment, enter the Receipt Number provided by our representative in the field below before submitting your registration.
+        </div>
+      </div>
+    `;
+  }
+  
+  instructionsDiv.innerHTML = instructions;
+  instructionsDiv.classList.remove('hidden');
 }
 
 // Add click event listeners to course cards
@@ -175,17 +299,17 @@ courseCards.forEach(card => {
   });
 });
 
+// Update payment instructions when payment method changes
+document.getElementById('paymentMethod').addEventListener('change', updatePaymentInstructions);
+
 // Initialize display
 updateSelectedCoursesDisplay();
 
 // Registration form logic
 const registrationForm = document.getElementById('registrationForm');
-const paymentInstructionsDiv = document.getElementById('paymentInstructions');
-const confirmationForm = document.getElementById('confirmationForm');
-const confirmationStatusDiv = document.getElementById('confirmationStatus');
-const paymentMethodSelect = document.getElementById('paymentMethod');
 const formErrorDiv = document.getElementById('formError');
 
+// Update form submission to use JSONP
 registrationForm.addEventListener('submit', function(e) {
   e.preventDefault();
   formErrorDiv.style.display = 'none';
@@ -197,98 +321,257 @@ registrationForm.addEventListener('submit', function(e) {
     return;
   }
   
-  const paymentMethod = paymentMethodSelect.value;
+  const paymentMethod = document.getElementById('paymentMethod').value;
   if (!paymentMethod) {
     formErrorDiv.textContent = 'Please select a payment method.';
     formErrorDiv.style.display = 'block';
     return;
   }
   
-  // Store form data in hidden fields for confirmation form
-  document.getElementById('confirmFullName').value = document.getElementById('fullName').value;
-  document.getElementById('confirmPhone').value = document.getElementById('phone').value;
-  document.getElementById('confirmEmail').value = document.getElementById('email').value;
-  document.getElementById('confirmPaymentMethod').value = paymentMethod;
-  
-  const totalAmount = totalFeeSpan.textContent;
-  let instructions = '';
-  
-  if (paymentMethod === 'Mobile Money') {
-    instructions = `<strong>Mobile Money Payment Instructions:</strong><br><br>
-      <b>Amount to Pay:</b> ${totalAmount}<br><br>
-      <b>Step 1:</b> Dial *170# on your mobile phone<br>
-      <b>Step 2:</b> Select "Send Money" option<br>
-      <b>Step 3:</b> Enter recipient number: <b>0245950898</b><br>
-      <b>Step 4:</b> Enter amount: <b>${totalAmount.replace('GH₵', '')}</b><br>
-      <b>Step 5:</b> Enter your PIN to confirm<br>
-      <b>Step 6:</b> You will receive a confirmation SMS with transaction ID<br><br>
-      <b>Recipient Name:</b> PHINES empire<br>
-      <b>Business Number:</b> 0546862331<br><br>
-      <b>Important:</b> After successful payment, copy the transaction ID from your SMS and enter it below.`;
-  } else if (paymentMethod === 'Bank Transfer') {
-    instructions = `<strong>Bank Transfer Payment Instructions:</strong><br><br>
-      <b>Amount to Pay:</b> ${totalAmount}<br><br>
-      <b>Step 1:</b> Visit your nearest Stanbic Bank branch or use mobile banking<br>
-      <b>Step 2:</b> Request to transfer money to the account below<br>
-      <b>Step 3:</b> Provide the following details:<br>
-      &nbsp;&nbsp;• <b>Account Number:</b> 9040012371572<br>
-      &nbsp;&nbsp;• <b>Bank:</b> Stanbic Bank<br>
-      &nbsp;&nbsp;• <b>Branch:</b> Spintex branch<br>
-      &nbsp;&nbsp;• <b>Amount:</b> ${totalAmount.replace('GH₵', '')}<br>
-      <b>Step 4:</b> Complete the transfer and collect your receipt<br>
-      <b>Step 5:</b> Note the transaction reference number on your receipt<br><br>
-      <b>Important:</b> After successful transfer, enter the transaction reference number from your receipt below.`;
-  } else if (paymentMethod === 'Cash') {
-    instructions = `<strong>Cash Payment Instructions:</strong><br><br>
-      <b>Amount to Pay:</b> ${totalAmount}<br><br>
-      <b>Step 1:</b> Call <b>0546862331</b> to schedule an appointment<br>
-      <b>Step 2:</b> Arrange a convenient time and location for payment<br>
-      <b>Step 3:</b> Bring the exact amount: <b>${totalAmount}</b><br>
-      <b>Step 4:</b> Meet with our representative at the agreed location<br>
-      <b>Step 5:</b> Make payment and collect your receipt<br>
-      <b>Step 6:</b> Note the receipt number for your records<br><br>
-      <b>Contact:</b> 0546862331<br><br>
-      <b>Important:</b> After payment, enter the receipt number provided by our representative below.`;
+  const transactionId = document.getElementById('transactionId').value;
+  if (!transactionId) {
+    formErrorDiv.textContent = 'Please enter your transaction ID.';
+    formErrorDiv.style.display = 'block';
+    return;
   }
   
-  paymentInstructionsDiv.innerHTML = instructions;
-  paymentInstructionsDiv.classList.remove('hidden');
-  confirmationForm.classList.remove('hidden');
-  registrationForm.classList.add('hidden');
+  // Show loading state
+  const submitBtn = registrationForm.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.textContent = 'Submitting...';
+  submitBtn.disabled = true;
+  
+  // Prepare form data
+  const formData = {
+    action: 'submitRegistration',
+    fullName: document.getElementById('fullName').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    courses: document.getElementById('coursesInput').value,
+    paymentMethod: paymentMethod,
+    totalFee: document.getElementById('totalFeeInput').value,
+    transactionId: transactionId
+  };
+  
+  // Create script tag for JSONP request
+  const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+  const script = document.createElement('script');
+  
+  // Define callback function
+  window[callbackName] = function(data) {
+    delete window[callbackName];
+    document.body.removeChild(script);
+    
+    // Restore button state
+    submitBtn.textContent = originalBtnText;
+    submitBtn.disabled = false;
+    
+    if (data.success) {
+      // Show success message with pending verification note
+      showResponse('success', 'Registration Submitted!', 
+        'Your registration has been received successfully. Your payment is pending manual verification, which may take up to 24 hours. You will receive your tickets via email once verified.', 
+        { 
+          'Transaction ID': transactionId,
+          'Reference Number': data.data.referenceId || 'N/A'
+        });
+    } else {
+      // Show error message
+      showResponse('error', 'Registration Failed', data.error);
+    }
+  };
+  
+  // Build URL with parameters
+  const baseUrl = "https://script.google.com/macros/s/AKfycbzuwJQDbcD1ENY9gJEPnFgGrwYrXOnt-TWeeNKOZurAJ9g8qFiE-7HPOVG8QCt334Y/exec";
+  const url = baseUrl + 
+    '?callback=' + callbackName +
+    '&data=' + encodeURIComponent(JSON.stringify(formData));
+  
+  script.src = url;
+  document.body.appendChild(script);
+  
+  // Handle script load errors
+  script.onerror = function() {
+    delete window[callbackName];
+    document.body.removeChild(script);
+    
+    // Restore button state
+    submitBtn.textContent = originalBtnText;
+    submitBtn.disabled = false;
+    
+    // Show error message
+    showResponse('error', 'Network Error', 'There was a problem submitting your registration. Please try again.');
+  };
 });
 
-// Handle form redirect after submission
-window.addEventListener('load', function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get('status');
-  const message = urlParams.get('message');
-  const uniqueId = urlParams.get('uniqueId');
+// Function to show response modal
+function showResponse(type, title, message, details) {
+  const container = document.getElementById('responseContainer');
+  const icon = container.querySelector('.response-icon');
+  const titleEl = container.querySelector('.response-title');
+  const messageEl = container.querySelector('.response-message');
+  const detailsEl = container.querySelector('.response-details');
   
-  if (status === 'success') {
-    // Show success message
-    document.getElementById('successMessage').textContent = message;
-    document.getElementById('successMessage').classList.remove('hidden');
-    
-    // Hide all forms
-    document.getElementById('registrationForm').classList.add('hidden');
-    document.getElementById('paymentInstructions').classList.add('hidden');
-    document.getElementById('confirmationForm').classList.add('hidden');
-    
-    // Show unique ID if available
-    if (uniqueId) {
-      const uniqueIdElement = document.createElement('p');
-      uniqueIdElement.innerHTML = `<strong>Your Unique ID:</strong> ${uniqueId}`;
-      uniqueIdElement.style.marginTop = '15px';
-      document.getElementById('successMessage').appendChild(uniqueIdElement);
-    }
-  } else if (status === 'error') {
-    // Show error message
-    document.getElementById('errorMessage').textContent = message || 'An error occurred during registration.';
-    document.getElementById('errorMessage').classList.remove('hidden');
-    
-    // Show registration form again
-    document.getElementById('registrationForm').classList.remove('hidden');
-    document.getElementById('paymentInstructions').classList.add('hidden');
-    document.getElementById('confirmationForm').classList.add('hidden');
+  // Set content based on type
+  container.className = `response-modal response-${type}`;
+  icon.textContent = type === 'success' ? '✓' : '⚠';
+  titleEl.textContent = title;
+  messageEl.textContent = message;
+  
+  // Add details if provided
+  if (details && Object.keys(details).length > 0) {
+    detailsEl.innerHTML = Object.entries(details)
+      .map(([key, value]) => `<p><strong>${key}:</strong> ${value}</p>`)
+      .join('');
+    detailsEl.classList.remove('hidden');
+  } else {
+    detailsEl.classList.add('hidden');
   }
+  
+  // Show the modal
+  container.classList.remove('hidden');
+  
+  // Hide the form
+  document.getElementById('registrationForm').classList.add('hidden');
+  
+  // Also hide any existing messages
+  document.getElementById('successMessage').classList.add('hidden');
+  document.getElementById('errorMessage').classList.add('hidden');
+}
+
+// Add event listeners for modal buttons
+document.getElementById('registerAnotherBtn').addEventListener('click', function() {
+  // Reset form and show it again
+  registrationForm.reset();
+  selectedCourses = [];
+  updateSelectedCoursesDisplay();
+  updateCourseSelection();
+  updateTotalFee();
+  
+  // Remove selected class from all course cards
+  document.querySelectorAll('.course-card').forEach(card => {
+    card.classList.remove('selected');
+    const btn = card.querySelector('.course-select-btn');
+    const btnText = btn.querySelector('.btn-text');
+    const btnIcon = btn.querySelector('.btn-icon');
+    btnText.textContent = 'Select Course';
+    btnIcon.textContent = '+';
+  });
+  
+  // Hide modal and show form
+  document.getElementById('responseContainer').classList.add('hidden');
+  document.getElementById('registrationForm').classList.remove('hidden');
 });
+
+document.getElementById('closeResponseBtn').addEventListener('click', function() {
+  document.getElementById('responseContainer').classList.add('hidden');
+});
+
+// Add CSS for the payment instructions
+const paymentInstructionsStyle = document.createElement('style');
+paymentInstructionsStyle.textContent = `
+  .payment-instructions {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+  }
+  
+  .payment-instructions h3 {
+    margin-top: 0;
+    color: #1e3c72;
+    border-bottom: 2px solid #e7cfa7;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .instruction-icon {
+    font-size: 24px;
+  }
+  
+  .instruction-steps {
+    margin: 20px 0;
+  }
+  
+  .step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    gap: 15px;
+  }
+  
+  .step-number {
+    background: #1e3c72;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: bold;
+  }
+  
+  .step p {
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .step ul {
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+  
+  .step li {
+    margin-bottom: 5px;
+  }
+  
+  .payment-details {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 15px 0;
+    border-left: 4px solid #1e3c72;
+  }
+  
+  .payment-details p {
+    margin: 5px 0;
+  }
+  
+  .instruction-note {
+    background: #fff3cd;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #ffc107;
+    margin-top: 15px;
+    font-size: 0.95em;
+  }
+  
+  .highlight {
+    background: #e7f3ff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #b8daff;
+    color: #004085;
+    font-weight: bold;
+  }
+  
+  .transaction-id-group {
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .step {
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .step-number {
+      align-self: flex-start;
+    }
+  }
+`;
+document.head.appendChild(paymentInstructionsStyle);
