@@ -12,6 +12,61 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/lady-1-svgrepo-com.png">
   <link rel="icon" type="image/jpg" sizes="16x16" href="assets/lady-1-svgrepo-com.png">
   <meta name="theme-color" content="#1e3c72">
+  <style>
+    .hidden {
+      display: none;
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    
+    .modern-selected-courses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .modern-course-chip {
+      background: #1e3c72;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .chip-remove {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .empty-selection-msg {
+      color: #666;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
   <header class="hero-summit">
@@ -137,7 +192,15 @@
     </section>
     <section class="registration">
       <h2>Register Now</h2>
-      <form id="registrationForm">
+      
+      <!-- Success/Error Messages -->
+      <div id="successMessage" class="success-message hidden"></div>
+      <div id="errorMessage" class="error-message hidden"></div>
+      
+      <!-- Registration Form -->
+      <form id="registrationForm" method="POST" action="https://script.google.com/macros/s/AKfycbwLIOZ_WWWh35T_X1xX5eJtouwrtqPvYIT1lZPpK5PLX0NCsnM_7sG7pXooQ6EtW63n/exec">
+        <input type="hidden" name="action" value="submitRegistration">
+        
         <div class="form-group">
           <label for="fullName">Full Name</label>
           <input type="text" id="fullName" name="fullName" required>
@@ -153,6 +216,7 @@
         <div class="form-group">
           <label>Preferred Course(s)</label>
           <div id="selectedCourses" class="selected-courses-display"></div>
+          <input type="hidden" id="coursesInput" name="courses" required>
         </div>
         <div id="formError" class="error-message"></div>
         <div class="form-group">
@@ -167,11 +231,23 @@
         <div class="form-group total-fee">
           <label>Total Fees:</label>
           <span id="totalFee">GH₵0</span>
+          <input type="hidden" id="totalFeeInput" name="totalFee" value="0">
         </div>
         <button type="submit" class="register-btn">Register</button>
       </form>
+      
       <div id="paymentInstructions" class="hidden"></div>
-      <form id="confirmationForm" class="hidden">
+      
+      <!-- Confirmation Form -->
+      <form id="confirmationForm" class="hidden" method="POST" action="https://script.google.com/macros/s/AKfycbwLIOZ_WWWh35T_X1xX5eJtouwrtqPvYIT1lZPpK5PLX0NCsnM_7sG7pXooQ6EtW63n/exec">
+        <input type="hidden" name="action" value="submitRegistration">
+        <input type="hidden" id="confirmFullName" name="fullName">
+        <input type="hidden" id="confirmPhone" name="phone">
+        <input type="hidden" id="confirmEmail" name="email">
+        <input type="hidden" id="confirmCourses" name="courses">
+        <input type="hidden" id="confirmTotalFee" name="totalFee">
+        <input type="hidden" id="confirmPaymentMethod" name="paymentMethod">
+        
         <div class="form-group">
           <label for="transactionId">Transaction ID</label>
           <input type="text" id="transactionId" name="transactionId" required>
@@ -181,17 +257,23 @@
           <button type="submit" class="confirm-btn">Confirm Payment</button>
         </div>
       </form>
+      <!-- Add this to your HTML, preferably near the end of the body -->
+      <div id="responseContainer" class="hidden">
+        <div class="response-content">
+          <div class="response-icon"></div>
+          <h3 class="response-title"></h3>
+          <p class="response-message"></p>
+          <div class="response-details"></div>
+          <div class="response-actions">
+            <button class="btn btn-primary" id="registerAnotherBtn">Register Another</button>
+            <button class="btn btn-secondary" id="closeResponseBtn">Close</button>
+          </div>
+        </div>
+      </div>
       <div id="confirmationStatus" class="hidden"></div>
     </section>
   </main>
   <footer>
-    <!-- <div class="sponsors">
-      <img src="https://i.imgur.com/1QwQwQw.png" alt="Phinies Beauty & Hair" title="Phinies Beauty & Hair">
-      <img src="https://i.imgur.com/2WwWwWw.png" alt="Lyks Gadget Shop" title="Lyks Gadget Shop">
-      <img src="https://i.imgur.com/3EeEeEe.png" alt="Bih" title="Bih">
-      <img src="https://i.imgur.com/4AaAaAa.png" alt="NinaBelle" title="NinaBelle">
-      <img src="https://i.imgur.com/5YyYyYy.png" alt="CY" title="CY">
-    </div> -->
     <div class="footer-info">
       <span>@phiniesbeautyandhair</span> | <span>0546862331 | Developed by <a href="https://veritrack.cloud" target="_blank">VeriTrack Systems</a> ✓✓</span>
     </div>

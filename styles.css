@@ -1,3 +1,97 @@
+/* Response Container Styles */
+#responseContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+#responseContainer.hidden {
+  display: none;
+}
+
+.response-content {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.response-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.response-success .response-icon {
+  color: #28a745;
+}
+
+.response-error .response-icon {
+  color: #dc3545;
+}
+
+.response-title {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #1e3c72;
+}
+
+.response-message {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.response-details {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.response-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #1e3c72;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2a5298;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
 /* Award Announcement Section */
 .award-announcement {
   background: linear-gradient(120deg, #FFD700 60%, #fff7e6 100%);
