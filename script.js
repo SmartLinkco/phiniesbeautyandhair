@@ -257,233 +257,38 @@ registrationForm.addEventListener('submit', function(e) {
   registrationForm.classList.add('hidden');
 });
 
-// Replace the current confirmationForm event listener with this:
-confirmationForm.addEventListener('submit', function(e) {
-  e.preventDefault();
+// Handle form redirect after submission
+window.addEventListener('load', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get('status');
+  const message = urlParams.get('message');
+  const uniqueId = urlParams.get('uniqueId');
   
-  // Show loading state
-  const submitBtn = confirmationForm.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = 'Processing...';
-  submitBtn.disabled = true;
-  
-  // Get the actual script URL from the form action
-  const scriptURL = confirmationForm.getAttribute('action');
-  
-  // Get form data
-  const formData = new FormData(confirmationForm);
-  
-  // Log for debugging
-  console.log('Submitting to:', scriptURL);
-  console.log('Form data:', Object.fromEntries(formData.entries()));
-  
-  // Send data to Google Apps Script using fetch
-  fetch(scriptURL, {
-    method: 'POST',
-    body: formData,
-    mode: 'no-cors' // Important for Google Apps Script
-  })
-  .then(response => {
-    // With no-cors mode, we can't access response body directly
-    // We'll assume success if we get to this point without error
-    console.log('Form submitted successfully');
-    showResponse(true, 'Registration submitted successfully. Please check your email for confirmation.', 'UNIQUE_ID_PLACEHOLDER');
+  if (status === 'success') {
+    // Show success message
+    document.getElementById('successMessage').textContent = message;
+    document.getElementById('successMessage').classList.remove('hidden');
     
-    // Clear the form
-    confirmationForm.reset();
-    registrationForm.reset();
-    selectedCourses = [];
-    updateSelectedCoursesDisplay();
-    updateCourseSelection();
-    updateTotalFee();
+    // Hide all forms
+    document.getElementById('registrationForm').classList.add('hidden');
+    document.getElementById('paymentInstructions').classList.add('hidden');
+    document.getElementById('confirmationForm').classList.add('hidden');
     
-    return {success: true}; // Simulate successful response
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    showResponse(false, 'An error occurred during registration. Please try again.');
-  })
-  .finally(() => {
-    // Restore button state
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-  });
-});
-
-// Alternative approach if the above doesn't work
-// Add this function to handle form submission via iframe
-function submitFormViaIframe(form, callback) {
-  // Create a temporary iframe
-  const iframe = document.createElement('iframe');
-  iframe.name = 'form-submission-iframe';
-  iframe.style.display = 'none';
-  
-  // Add iframe to document
-  document.body.appendChild(iframe);
-  
-  // Set form target to the iframe
-  const originalTarget = form.target;
-  form.target = iframe.name;
-  
-  // Handle iframe load event
-  iframe.onload = function() {
-    try {
-      // Try to get the response from the iframe
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      const responseText = iframeDoc.body.textContent || iframeDoc.body.innerText;
-      
-      console.log('Response from iframe:', responseText);
-      
-      // Try to parse as JSON
-      let responseData;
-      try {
-        responseData = JSON.parse(responseText);
-      } catch (e) {
-        // If not JSON, assume success
-        responseData = {success: true, message: 'Form submitted successfully'};
-      }
-      
-      // Call callback with response
-      if (callback) callback(responseData);
-    } catch (e) {
-      console.error('Error reading iframe response:', e);
-      if (callback) callback({success: false, message: 'Error processing response'});
+    // Show unique ID if available
+    if (uniqueId) {
+      const uniqueIdElement = document.createElement('p');
+      uniqueIdElement.innerHTML = `<strong>Your Unique ID:</strong> ${uniqueId}`;
+      uniqueIdElement.style.marginTop = '15px';
+      document.getElementById('successMessage').appendChild(uniqueIdElement);
     }
+  } else if (status === 'error') {
+    // Show error message
+    document.getElementById('errorMessage').textContent = message || 'An error occurred during registration.';
+    document.getElementById('errorMessage').classList.remove('hidden');
     
-    // Clean up
-    document.body.removeChild(iframe);
-    form.target = originalTarget;
-  };
-  
-  // Submit the form
-  form.submit();
-}
-
-// Alternative event listener using iframe approach
-/*
-confirmationForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  // Show loading state
-  const submitBtn = confirmationForm.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = 'Processing...';
-  submitBtn.disabled = true;
-  
-  // Use iframe method
-  submitFormViaIframe(this, function(responseData) {
-    if (responseData.success) {
-      showResponse(true, responseData.message, responseData.uniqueId);
-      // Clear the form
-      confirmationForm.reset();
-      registrationForm.reset();
-      selectedCourses = [];
-      updateSelectedCoursesDisplay();
-      updateCourseSelection();
-      updateTotalFee();
-    } else {
-      showResponse(false, responseData.message);
-    }
-    
-    // Restore button state
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-  });
-});
-*/
-
-// Add these new functions to handle response display:
-function showResponse(success, message, uniqueId = null) {
-  const responseContainer = document.getElementById('responseContainer');
-  const responseIcon = responseContainer.querySelector('.response-icon');
-  const responseTitle = responseContainer.querySelector('.response-title');
-  const responseMessage = responseContainer.querySelector('.response-message');
-  const responseDetails = responseContainer.querySelector('.response-details');
-  
-  // Set response content based on success or error
-  if (success) {
-    responseContainer.classList.add('response-success');
-    responseContainer.classList.remove('response-error');
-    responseIcon.textContent = '✓';
-    responseTitle.textContent = 'Registration Successful!';
-    responseMessage.textContent = message;
-    
-    // Add unique ID if available
-    if (uniqueId && uniqueId !== 'UNIQUE_ID_PLACEHOLDER') {
-      responseDetails.innerHTML = `<p><strong>Your Unique ID:</strong> ${uniqueId}</p>`;
-    } else {
-      responseDetails.innerHTML = '';
-    }
-  } else {
-    responseContainer.classList.add('response-error');
-    responseContainer.classList.remove('response-success');
-    responseIcon.textContent = '✗';
-    responseTitle.textContent = 'Registration Failed';
-    responseMessage.textContent = message;
-    responseDetails.innerHTML = '';
+    // Show registration form again
+    document.getElementById('registrationForm').classList.remove('hidden');
+    document.getElementById('paymentInstructions').classList.add('hidden');
+    document.getElementById('confirmationForm').classList.add('hidden');
   }
-  
-  // Show the response container
-  responseContainer.classList.remove('hidden');
-}
-
-// Add event listeners for response buttons
-document.getElementById('registerAnotherBtn').addEventListener('click', function() {
-  document.getElementById('responseContainer').classList.add('hidden');
-  // Show the registration form again
-  document.getElementById('registrationForm').classList.remove('hidden');
-  document.getElementById('paymentInstructions').classList.add('hidden');
-  document.getElementById('confirmationForm').classList.add('hidden');
 });
-
-document.getElementById('closeResponseBtn').addEventListener('click', function() {
-  document.getElementById('responseContainer').classList.add('hidden');
-});
-
-// // Add these new functions to handle response display:
-// function showResponse(success, message, uniqueId = null) {
-//   const responseContainer = document.getElementById('responseContainer');
-//   const responseIcon = responseContainer.querySelector('.response-icon');
-//   const responseTitle = responseContainer.querySelector('.response-title');
-//   const responseMessage = responseContainer.querySelector('.response-message');
-//   const responseDetails = responseContainer.querySelector('.response-details');
-  
-//   // Set response content based on success or error
-//   if (success) {
-//     responseContainer.classList.add('response-success');
-//     responseContainer.classList.remove('response-error');
-//     responseIcon.textContent = '✓';
-//     responseTitle.textContent = 'Registration Successful!';
-//     responseMessage.textContent = message;
-    
-//     // Add unique ID if available
-//     if (uniqueId) {
-//       responseDetails.innerHTML = `<p><strong>Your Unique ID:</strong> ${uniqueId}</p>`;
-//     } else {
-//       responseDetails.innerHTML = '';
-//     }
-//   } else {
-//     responseContainer.classList.add('response-error');
-//     responseContainer.classList.remove('response-success');
-//     responseIcon.textContent = '✗';
-//     responseTitle.textContent = 'Registration Failed';
-//     responseMessage.textContent = message;
-//     responseDetails.innerHTML = '';
-//   }
-  
-//   // Show the response container
-//   responseContainer.classList.remove('hidden');
-// }
-
-// // Add event listeners for response buttons
-// // document.getElementById('registerAnotherBtn').addEventListener('click', function() {
-// //   document.getElementById('responseContainer').classList.add('hidden');
-// //   // Show the registration form again
-// //   document.getElementById('registrationForm').classList.remove('hidden');
-// //   document.getElementById('paymentInstructions').classList.add('hidden');
-// //   document.getElementById('confirmationForm').classList.add('hidden');
-// // });
-
-// // document.getElementById('closeResponseBtn').addEventListener('click', function() {
-// //   document.getElementById('responseContainer').classList.add('hidden');
-// // });
