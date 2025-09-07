@@ -380,6 +380,7 @@ document.getElementById('paymentMethod').addEventListener('change', updatePaymen
 updateSelectedCoursesDisplay();
 
 // Registration form logic
+// Registration form logic
 const registrationForm = document.getElementById('registrationForm');
 const formErrorDiv = document.getElementById('formError');
 
@@ -415,7 +416,7 @@ registrationForm.addEventListener('submit', function(e) {
   submitBtn.textContent = 'Submitting...';
   submitBtn.disabled = true;
   
-  // Prepare form data
+  // Prepare form data as URL parameters (not JSON)
   const formData = {
     action: 'submitRegistration',
     fullName: document.getElementById('fullName').value,
@@ -446,19 +447,24 @@ registrationForm.addEventListener('submit', function(e) {
         'Your registration has been received successfully. Your payment is pending manual verification, which may take up to 24 hours. You will receive your tickets via email once verified.', 
         { 
           'Transaction ID': transactionId,
-          'Reference Number': data.data.referenceId || 'N/A'
+          'Reference Number': data.data.uniqueId || 'N/A'
         });
     } else {
       // Show error message
-      showResponse('error', 'Registration Failed', data.error);
+      showResponse('error', 'Registration Failed', data.error || 'An unknown error occurred');
     }
   };
   
-  // Build URL with parameters
-  const baseUrl = "https://script.google.com/macros/s/AKfycbzuwJQDbcD1ENY9gJEPnFgGrwYrXOnt-TWeeNKOZurAJ9g8qFiE-7HPOVG8QCt334Y/exec";
-  const url = baseUrl + 
-    '?callback=' + callbackName +
-    '&data=' + encodeURIComponent(JSON.stringify(formData));
+  // Build URL with parameters (not as JSON string)
+  const baseUrl = "https://script.google.com/macros/s/AKfycbxD0WmFankC_lT-mGA_vsShIwD1fO4yU0mG7EMv56PcUO-PXPVQiuyadw7GrvB-RRUH/exec";
+  let url = baseUrl + '?callback=' + encodeURIComponent(callbackName);
+  
+  // Add all form data as URL parameters
+  for (const key in formData) {
+    if (formData.hasOwnProperty(key)) {
+      url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(formData[key]);
+    }
+  }
   
   script.src = url;
   document.body.appendChild(script);
@@ -473,7 +479,7 @@ registrationForm.addEventListener('submit', function(e) {
     submitBtn.disabled = false;
     
     // Show error message
-    showResponse('error', 'Network Error', 'There was a problem submitting your registration. Please try again.');
+    showResponse('error', 'Network Error', 'There was a problem submitting your registration. Please check your connection and try again.');
   };
 });
 
