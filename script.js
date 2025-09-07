@@ -490,12 +490,23 @@ function showResponse(type, title, message, details) {
   const titleEl = container.querySelector('.response-title');
   const messageEl = container.querySelector('.response-message');
   const detailsEl = container.querySelector('.response-details');
+  const successActions = container.querySelector('.success-actions');
+  const errorActions = container.querySelector('.error-actions');
   
   // Set content based on type
   container.className = `response-modal response-${type}`;
   icon.textContent = type === 'success' ? '✓' : '⚠';
   titleEl.textContent = title;
   messageEl.textContent = message;
+  
+  // Show appropriate action buttons
+  if (type === 'success') {
+    successActions.style.display = 'flex';
+    errorActions.style.display = 'none';
+  } else {
+    successActions.style.display = 'none';
+    errorActions.style.display = 'flex';
+  }
   
   // Add details if provided
   if (details && Object.keys(details).length > 0) {
@@ -519,7 +530,32 @@ function showResponse(type, title, message, details) {
 }
 
 // Add event listeners for modal buttons
+
+// Success action buttons
 document.getElementById('registerAnotherBtn').addEventListener('click', function() {
+  resetFormAndShowNew();
+});
+
+document.getElementById('doneBtn').addEventListener('click', function() {
+  document.getElementById('responseContainer').classList.add('hidden');
+  document.getElementById('registrationTitle').innerHTML = 'Thank You for Registering!';
+  // Optionally scroll to top or another section
+  // window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Error action buttons
+document.getElementById('goBackBtn').addEventListener('click', function() {
+  // Hide modal and show form again with existing data
+  document.getElementById('responseContainer').classList.add('hidden');
+  document.getElementById('registrationForm').classList.remove('hidden');
+});
+
+document.getElementById('newRegistrationBtn').addEventListener('click', function() {
+  resetFormAndShowNew();
+});
+
+// Helper function to reset form and start new registration
+function resetFormAndShowNew() {
   // Reset form and show it again
   registrationForm.reset();
   selectedCourses = [];
@@ -540,11 +576,13 @@ document.getElementById('registerAnotherBtn').addEventListener('click', function
   // Hide modal and show form
   document.getElementById('responseContainer').classList.add('hidden');
   document.getElementById('registrationForm').classList.remove('hidden');
-});
-
-document.getElementById('closeResponseBtn').addEventListener('click', function() {
-  document.getElementById('responseContainer').classList.add('hidden');
-});
+  
+  // Scroll to registration section
+  document.getElementById('registration').scrollIntoView({ 
+    behavior: 'smooth', 
+    block: 'start' 
+  });
+}
 
 // Add CSS for the payment instructions
 const paymentInstructionsStyle = document.createElement('style');

@@ -160,8 +160,8 @@
       </div>
     </section>
     <section class="registration" id="registration">
-      <h2>Register Now</h2>
-      
+      <h2 id="registrationTitle">Register Now</h2>
+
       <!-- Success/Error Messages -->
       <div id="successMessage" class="success-message hidden"></div>
       <div id="errorMessage" class="error-message hidden"></div>
@@ -236,8 +236,16 @@
           <p class="response-message"></p>
           <div class="response-details"></div>
           <div class="response-actions">
-            <button class="btn btn-primary" id="registerAnotherBtn">Register Another</button>
-            <button class="btn btn-secondary" id="closeResponseBtn">Close</button>
+            <!-- Success buttons -->
+            <div class="success-actions" style="display: none;">
+              <button class="btn btn-success" id="registerAnotherBtn">Register Another</button>
+              <button class="btn btn-secondary" id="doneBtn">Done</button>
+            </div>
+            <!-- Error buttons -->
+            <div class="error-actions" style="display: none;">
+              <button class="btn btn-primary" id="goBackBtn">Go Back</button>
+              <button class="btn btn-secondary" id="newRegistrationBtn">New Registration</button>
+            </div>
           </div>
         </div>
       </div>
