@@ -1,3 +1,77 @@
+// Fixed Header Navigation
+document.addEventListener('DOMContentLoaded', function() {
+  // Mobile menu functionality
+  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+  const headerNav = document.querySelector('.header-nav');
+  const body = document.body;
+  
+  if (mobileMenuToggle && headerNav) {
+    mobileMenuToggle.addEventListener('click', function() {
+      headerNav.classList.toggle('mobile-nav-open');
+      mobileMenuToggle.classList.toggle('menu-open');
+      body.classList.toggle('menu-open');
+    });
+    
+    // Close mobile menu when clicking on nav links
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        headerNav.classList.remove('mobile-nav-open');
+        mobileMenuToggle.classList.remove('menu-open');
+        body.classList.remove('menu-open');
+      });
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.fixed-header')) {
+        headerNav.classList.remove('mobile-nav-open');
+        mobileMenuToggle.classList.remove('menu-open');
+        body.classList.remove('menu-open');
+      }
+    });
+  }
+  
+  // Smooth scrolling for navigation links
+  const navLinks = document.querySelectorAll('.nav-link');
+  
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        const headerHeight = document.querySelector('.fixed-header').offsetHeight;
+        const targetPosition = targetElement.offsetTop - headerHeight - 20;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+  
+  // Header scroll effect
+  const header = document.querySelector('.fixed-header');
+  let lastScrollY = window.scrollY;
+  
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > 100) {
+      header.style.background = 'linear-gradient(135deg, rgba(243, 193, 84, 0.95) 0%, rgba(191, 160, 106, 0.95) 100%)';
+      header.style.backdropFilter = 'blur(15px)';
+    } else {
+      header.style.background = 'linear-gradient(135deg, #f3c154 0%, #bfa06a 100%)';
+      header.style.backdropFilter = 'blur(10px)';
+    }
+    
+    lastScrollY = currentScrollY;
+  });
+});
+
 // Slideshow Functionality
 const slides = document.querySelectorAll('.slide');
 const prevBtn = document.getElementById('prevSlide');

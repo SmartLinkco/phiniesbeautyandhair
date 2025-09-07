@@ -14,6 +14,30 @@
   <meta name="theme-color" content="#1e3c72">
 </head>
 <body>
+  <!-- Fixed Navigation Header -->
+  <nav class="fixed-header">
+    <div class="header-container">
+      <div class="header-logo">
+        <img src="assets/phinies logo.jpg" alt="Phinies Beauty & Hair" class="logo-img">
+        <div class="logo-text">
+          <span class="brand-name">PHINIES</span>
+          <span class="brand-tagline">BEAUTY & HAIR SALON</span>
+        </div>
+      </div>
+      <div class="header-nav">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#courses" class="nav-link">Courses</a>
+        <a href="#registration" class="nav-link">Register</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
   <header class="hero-summit">
     <div class="hero-bg-img"></div>
     <div class="hero-overlay"></div>
@@ -43,12 +67,12 @@
       <div class="award-details">
         <h2 class="award-title">Who Wins This?</h2>
         <p class="award-desc">3 best students stand the chance of winning this amazing prize pool and more!<br><span class="award-highlight">Do you have what it takes to win and start your own business?</span></p>
-        <button class="award-cta" onclick="window.scrollTo({top: document.querySelector('.registration').offsetTop, behavior: 'smooth'});">Register Now</button>
+        <button class="award-cta" onclick="document.getElementById('registration').scrollIntoView({behavior: 'smooth', block: 'start'}); setTimeout(() => window.scrollBy(0, -100), 100);">Register Now</button>
       </div>
     </div>
   </section>
   <main>
-    <section class="about">
+    <section class="about" id="about">
       <div class="about-header">
         <span class="about-icon">
           <img src="assets/lady-1-svgrepo-com.png" alt="Beauty Icon" />
@@ -82,7 +106,7 @@
         </div>
       </div>
     </section>
-    <section class="courses">
+    <section class="courses" id="courses">
       <h2>Our Courses</h2>
       <div class="course-cards">
         <div class="course-card modern-card" data-fee="1000" data-course="Lash Extension">
@@ -135,7 +159,7 @@
         </div>
       </div>
     </section>
-    <section class="registration">
+    <section class="registration" id="registration">
       <h2>Register Now</h2>
       
       <!-- Success/Error Messages -->
@@ -220,7 +244,7 @@
       <div id="confirmationStatus" class="hidden"></div>
     </section>
   </main>
-  <footer>
+  <footer id="contact">
     <div class="footer-content">
       <section class="sponsors-slideshow">
         <h2 class="sponsors-title">Our Proud Sponsors</h2>
