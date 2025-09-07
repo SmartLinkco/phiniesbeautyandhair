@@ -443,11 +443,11 @@ registrationForm.addEventListener('submit', function(e) {
     
     if (data.success) {
       // Show success message with pending verification note
-      showResponse('success', 'Registration Submitted!', 
-        'Your registration has been received successfully. Your payment is pending manual verification, which may take up to 24 hours. You will receive your tickets via email once verified.', 
+      showResponse('success', 'Registration Submitted Successfully!', 
+        'Your payment is being processed and verified. You will receive a confirmation email with your course details and tickets within 24 hours.', 
         { 
           'Transaction ID': transactionId,
-          'Reference Number': data.data.uniqueId || 'N/A'
+          'Event ID Number': "Pending Approval..." || 'N/A'
         });
     } else {
       // Show error message
@@ -456,7 +456,7 @@ registrationForm.addEventListener('submit', function(e) {
   };
   
   // Build URL with parameters (not as JSON string)
-  const baseUrl = "https://script.google.com/macros/s/AKfycbxD0WmFankC_lT-mGA_vsShIwD1fO4yU0mG7EMv56PcUO-PXPVQiuyadw7GrvB-RRUH/exec";
+  const baseUrl = "https://script.google.com/macros/s/AKfycby7Gk-2l0X7nnJW6u2xbL1jUI1tpcogt8zt4iQ2L1Eoda8uOkL9-D8w9FaDSBmSQQs2/exec";
   let url = baseUrl + '?callback=' + encodeURIComponent(callbackName);
   
   // Add all form data as URL parameters
