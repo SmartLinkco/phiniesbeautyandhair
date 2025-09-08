@@ -444,7 +444,7 @@ registrationForm.addEventListener('submit', function(e) {
     if (data.success) {
       // Show success message with pending verification note
       showResponse('success', 'Registration Submitted Successfully!', 
-        'Your payment is verified. You will receive a confirmation email with your course details and tickets within 24 hours.', 
+        'Your payment is being verified. You will receive a confirmation email with your course details and tickets within 24 hours.', 
         { 
           'Transaction ID': transactionId,
           'Event ID Number': "Pending Approval..." || 'N/A'
