@@ -67,7 +67,7 @@
       <div class="award-details">
         <h2 class="award-title">Who Wins This?</h2>
         <p class="award-desc">3 best students stand the chance of winning this amazing prize pool and more!<br><span class="award-highlight">Do you have what it takes to win and start your own business?</span></p>
-        <button class="award-cta" onclick="document.getElementById('registration').scrollIntoView({behavior: 'smooth', block: 'start'}); setTimeout(() => window.scrollBy(0, -100), 100);">Register Now</button>
+        <button class="award-cta" onclick="document.getElementById('registrationForm').scrollIntoView({behavior: 'smooth', block: 'start'}); setTimeout(() => window.scrollBy(0, -100), 200);">Register Now</button>
       </div>
     </div>
   </section>
@@ -106,59 +106,7 @@
         </div>
       </div>
     </section>
-    <section class="courses" id="courses">
-      <h2>Our Courses</h2>
-      <div class="course-cards">
-        <div class="course-card modern-card" data-fee="1000" data-course="Lash Extension">
-          <div class="course-selection-overlay">
-            <div class="selection-checkmark">✓</div>
-          </div>
-          <img src="https://img.icons8.com/ios-filled/100/FFD700/eyelash.png" alt="Lash Extension">
-          <h3>Lash Extension</h3>
-          <p>Classic, Hybrid, Volume, Mega Volume & more</p>
-          <div class="course-pricing">
-            <span class="fee">GH₵1,000</span>
-            <span class="course-duration">3 Days</span>
-          </div>
-          <div class="course-select-btn" data-course="Lash Extension" data-fee="1000">
-            <span class="btn-text">Select Course</span>
-            <span class="btn-icon">+</span>
-          </div>
-        </div>
-        <div class="course-card modern-card" data-fee="1300" data-course="Brows">
-          <div class="course-selection-overlay">
-            <div class="selection-checkmark">✓</div>
-          </div>
-          <img src="https://img.icons8.com/ios-filled/100/FFD700/eyebrow.png" alt="Brows">
-          <h3>Brows</h3>
-          <p>Microblading, Microshading, Combo Brows</p>
-          <div class="course-pricing">
-            <span class="fee">GH₵1,300</span>
-            <span class="course-duration">4 Days</span>
-          </div>
-          <div class="course-select-btn" data-course="Brows" data-fee="1300">
-            <span class="btn-text">Select Course</span>
-            <span class="btn-icon">+</span>
-          </div>
-        </div>
-        <div class="course-card modern-card" data-fee="950" data-course="Tint & Lamination">
-          <div class="course-selection-overlay">
-            <div class="selection-checkmark">✓</div>
-          </div>
-          <img src="https://img.icons8.com/ios-filled/100/FFD700/paint-brush.png" alt="Tint & Lamination">
-          <h3>Tint & Lamination</h3>
-          <p>All methods</p>
-          <div class="course-pricing">
-            <span class="fee">GH₵950</span>
-            <span class="course-duration">2 Days</span>
-          </div>
-          <div class="course-select-btn" data-course="Tint & Lamination" data-fee="950">
-            <span class="btn-text">Select Course</span>
-            <span class="btn-icon">+</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    
     <section class="registration" id="registration">
       <h2 id="registrationTitle">Register Now</h2>
 
@@ -184,6 +132,58 @@
         </div>
         <div class="form-group">
           <label>Preferred Course(s)</label>
+          <section class="courses" id="courses">
+          <div class="course-cards">
+            <div class="course-card modern-card" data-fee="1000" data-course="Lash Extension">
+              <div class="course-selection-overlay">
+                <div class="selection-checkmark">✓</div>
+              </div>
+              <img src="https://img.icons8.com/ios-filled/100/FFD700/eyelash.png" alt="Lash Extension">
+              <h3>Lash Extension</h3>
+              <p>Classic, Hybrid, Volume, Mega Volume & more</p>
+              <div class="course-pricing">
+                <span class="fee">GH₵1,000</span>
+                <span class="course-duration">3 Days</span>
+              </div>
+              <div class="course-select-btn" data-course="Lash Extension" data-fee="1000">
+                <span class="btn-text">Select Course</span>
+                <span class="btn-icon">+</span>
+              </div>
+            </div>
+            <div class="course-card modern-card" data-fee="1300" data-course="Brows">
+              <div class="course-selection-overlay">
+                <div class="selection-checkmark">✓</div>
+              </div>
+              <img src="https://img.icons8.com/ios-filled/100/FFD700/eyebrow.png" alt="Brows">
+              <h3>Brows</h3>
+              <p>Microblading, Microshading, Combo Brows</p>
+              <div class="course-pricing">
+                <span class="fee">GH₵1,300</span>
+                <span class="course-duration">4 Days</span>
+              </div>
+              <div class="course-select-btn" data-course="Brows" data-fee="1300">
+                <span class="btn-text">Select Course</span>
+                <span class="btn-icon">+</span>
+              </div>
+            </div>
+            <div class="course-card modern-card" data-fee="950" data-course="Tint & Lamination">
+              <div class="course-selection-overlay">
+                <div class="selection-checkmark">✓</div>
+              </div>
+              <img src="https://img.icons8.com/ios-filled/100/FFD700/paint-brush.png" alt="Tint & Lamination">
+              <h3>Tint & Lamination</h3>
+              <p>All methods</p>
+              <div class="course-pricing">
+                <span class="fee">GH₵950</span>
+                <span class="course-duration">2 Days</span>
+              </div>
+              <div class="course-select-btn" data-course="Tint & Lamination" data-fee="950">
+                <span class="btn-text">Select Course</span>
+                <span class="btn-icon">+</span>
+              </div>
+            </div>
+          </div>
+        </section>
           <div id="selectedCourses" class="selected-courses-display"></div>
           <input type="hidden" id="coursesInput" name="courses" required>
         </div>

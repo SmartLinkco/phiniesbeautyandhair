@@ -1359,6 +1359,7 @@ main {
   font-weight: 500;
 }
 .courses {
+  margin-top: 2rem;
   margin-bottom: 2rem;
 }
 .courses h2 {
