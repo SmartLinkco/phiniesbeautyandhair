@@ -444,7 +444,7 @@ registrationForm.addEventListener('submit', function(e) {
     if (data.success) {
       // Show success message with pending verification note
       showResponse('success', 'Registration Submitted Successfully!', 
-        'Your payment is being processed and verified. You will receive a confirmation email with your course details and tickets within 24 hours.', 
+        'Your payment is verified. You will receive a confirmation email with your course details and tickets within 24 hours.', 
         { 
           'Transaction ID': transactionId,
           'Event ID Number': "Pending Approval..." || 'N/A'
@@ -456,7 +456,7 @@ registrationForm.addEventListener('submit', function(e) {
   };
   
   // Build URL with parameters (not as JSON string)
-  const baseUrl = "https://script.google.com/macros/s/AKfycbz1tNWUm7cTfvI-bOo47VxpwtvG9eJXsCWapYke5_MCvNc99VZKLmEAxTthU0OwoLhT/exec";
+  const baseUrl = "https://script.google.com/macros/s/AKfycbwSFVsmYAi9gzgBDrw0qWFIvLRLIU-pxiiH6XFAV5IcaKloDYZmRDiIi61L-TmbLUoH/exec";
   let url = baseUrl + '?callback=' + encodeURIComponent(callbackName);
   
   // Add all form data as URL parameters
