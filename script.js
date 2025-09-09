@@ -132,6 +132,7 @@ function closeRegistration() {
   // Hide registration form and related elements
   const registrationForm = document.getElementById('registrationForm');
   const confirmationForm = document.getElementById('confirmationForm');
+  const confirmationModal = document.getElementById('confirmationModal');
   const registrationTitle = document.getElementById('registrationTitle');
   const awardCta = document.querySelector('.award-cta');
   const successMessage = document.getElementById('successMessage');
@@ -139,6 +140,7 @@ function closeRegistration() {
   
   if (registrationForm) registrationForm.classList.add('hidden');
   if (confirmationForm) confirmationForm.classList.add('hidden');
+  if (confirmationModal) confirmationModal.classList.add('hidden');
   if (successMessage) successMessage.classList.add('hidden');
   if (errorMessage) errorMessage.classList.add('hidden');
   
@@ -434,7 +436,7 @@ updateSelectedCoursesDisplay();
 const registrationForm = document.getElementById('registrationForm');
 const formErrorDiv = document.getElementById('formError');
 
-// Update form submission to use JSONP
+// Update form submission to show confirmation step
 registrationForm.addEventListener('submit', function(e) {
   e.preventDefault();
   formErrorDiv.style.display = 'none';
@@ -460,8 +462,48 @@ registrationForm.addEventListener('submit', function(e) {
     return;
   }
   
-  // Show loading state
-  const submitBtn = registrationForm.querySelector('button[type="submit"]');
+  // Show confirmation modal instead of submitting directly
+  showConfirmationModal();
+});
+
+// Function to show confirmation modal with all details
+function showConfirmationModal() {
+  const modal = document.getElementById('confirmationModal');
+  const fullName = document.getElementById('fullName').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const paymentMethod = document.getElementById('paymentMethod').value;
+  const transactionId = document.getElementById('transactionId').value;
+  const totalFee = document.getElementById('totalFeeInput').value;
+  
+  // Populate confirmation details
+  document.getElementById('confirmFullNameDisplay').textContent = fullName;
+  document.getElementById('confirmEmailDisplay').textContent = email;
+  document.getElementById('confirmPhoneDisplay').textContent = phone;
+  document.getElementById('confirmPaymentMethodDisplay').textContent = paymentMethod;
+  document.getElementById('confirmTransactionIdDisplay').textContent = transactionId;
+  document.getElementById('confirmTotalFeeDisplay').textContent = `GH₵${totalFee}`;
+  
+  // Populate selected courses
+  const coursesContainer = document.getElementById('confirmCoursesDisplay');
+  coursesContainer.innerHTML = '';
+  selectedCourses.forEach((course, index) => {
+    const courseItem = document.createElement('div');
+    courseItem.className = 'confirm-course-item';
+    courseItem.innerHTML = `
+      <span class="course-name">${course.name}</span>
+      <span class="course-fee">GH₵${course.fee}</span>
+    `;
+    coursesContainer.appendChild(courseItem);
+  });
+  
+  // Show the modal
+  modal.classList.remove('hidden');
+}
+
+// Function to actually submit the form (called from confirmation modal)
+function submitRegistrationForm() {
+  const submitBtn = document.getElementById('finalSubmitBtn');
   const originalBtnText = submitBtn.textContent;
   submitBtn.textContent = 'Submitting...';
   submitBtn.disabled = true;
@@ -473,11 +515,10 @@ registrationForm.addEventListener('submit', function(e) {
     email: document.getElementById('email').value,
     phone: document.getElementById('phone').value,
     courses: document.getElementById('coursesInput').value,
-    paymentMethod: paymentMethod,
+    paymentMethod: document.getElementById('paymentMethod').value,
     totalFee: document.getElementById('totalFeeInput').value,
-    transactionId: transactionId
+    transactionId: document.getElementById('transactionId').value
   };
-  
   // Create script tag for JSONP request
   const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
   const script = document.createElement('script');
@@ -491,12 +532,15 @@ registrationForm.addEventListener('submit', function(e) {
     submitBtn.textContent = originalBtnText;
     submitBtn.disabled = false;
     
+    // Hide confirmation modal
+    document.getElementById('confirmationModal').classList.add('hidden');
+    
     if (data.success) {
       // Show success message with pending verification note
       showResponse('success', 'Registration Submitted Successfully!', 
         'Your payment is being verified. You will receive a confirmation email with your course details and tickets within 24 hours.', 
         { 
-          'Transaction ID': transactionId,
+          'Transaction ID': formData.transactionId,
           'Event ID Number': "Pending Approval..." || 'N/A'
         });
     } else {
@@ -528,10 +572,19 @@ registrationForm.addEventListener('submit', function(e) {
     submitBtn.textContent = originalBtnText;
     submitBtn.disabled = false;
     
+    // Hide confirmation modal
+    document.getElementById('confirmationModal').classList.add('hidden');
+    
     // Show error message
     showResponse('error', 'Network Error', 'There was a problem submitting your registration. Please check your connection and try again.');
   };
-});
+}
+
+// Function to close confirmation modal
+function closeConfirmationModal() {
+  const modal = document.getElementById('confirmationModal');
+  modal.classList.add('hidden');
+}
 
 // Function to show response modal
 function showResponse(type, title, message, details) {

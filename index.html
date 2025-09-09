@@ -262,6 +262,72 @@
           <button type="submit" class="confirm-btn">Confirm Payment</button>
         </div>
       </form>
+      
+      <!-- Confirmation Modal -->
+      <div id="confirmationModal" class="confirmation-modal hidden">
+        <div class="confirmation-content">
+          <div class="confirmation-header">
+            <div class="confirm-icon">📋</div>
+            <h3 class="confirm-title">Please Review Your Registration Details</h3>
+            <p class="confirm-subtitle">Double-check all information before submitting</p>
+          </div>
+          
+          <div class="confirmation-details">
+            <div class="detail-section">
+              <h4 class="section-title">Personal Information</h4>
+              <div class="detail-grid">
+                <div class="detail-row">
+                  <span class="detail-label">Full Name:</span>
+                  <span class="detail-value" id="confirmFullNameDisplay"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Email:</span>
+                  <span class="detail-value" id="confirmEmailDisplay"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Phone:</span>
+                  <span class="detail-value" id="confirmPhoneDisplay"></span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="detail-section">
+              <h4 class="section-title">Selected Courses</h4>
+              <div class="courses-summary" id="confirmCoursesDisplay">
+                <!-- Courses will be populated by JavaScript -->
+              </div>
+            </div>
+            
+            <div class="detail-section">
+              <h4 class="section-title">Payment Information</h4>
+              <div class="detail-grid">
+                <div class="detail-row">
+                  <span class="detail-label">Payment Method:</span>
+                  <span class="detail-value" id="confirmPaymentMethodDisplay"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Transaction ID:</span>
+                  <span class="detail-value" id="confirmTransactionIdDisplay"></span>
+                </div>
+                <div class="detail-row total-row">
+                  <span class="detail-label">Total Fee:</span>
+                  <span class="detail-value total-amount" id="confirmTotalFeeDisplay"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="confirmation-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeConfirmationModal()">
+              ← Edit Details
+            </button>
+            <button type="button" class="btn btn-primary" id="finalSubmitBtn" onclick="submitRegistrationForm()">
+              ✓ Confirm & Submit
+            </button>
+          </div>
+        </div>
+      </div>
+      
       <div id="responseContainer" class="response-modal hidden">
         <div class="response-content">
           <div class="response-icon"></div>
