@@ -456,7 +456,7 @@ registrationForm.addEventListener('submit', function(e) {
   };
   
   // Build URL with parameters (not as JSON string)
-  const baseUrl = "https://script.google.com/macros/s/AKfycbwSFVsmYAi9gzgBDrw0qWFIvLRLIU-pxiiH6XFAV5IcaKloDYZmRDiIi61L-TmbLUoH/exec";
+  const baseUrl = "https://script.google.com/macros/s/AKfycbz48Y8M7tBs7ClhjCRQ436cZ7QNX_6AYB9dyPC9gUxZyR7rZ1TXP08P5tcQ1yoCs2df/exec";
   let url = baseUrl + '?callback=' + encodeURIComponent(callbackName);
   
   // Add all form data as URL parameters
