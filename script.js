@@ -102,19 +102,69 @@ document.querySelector('.slideshow-container').addEventListener('mouseleave', ()
 
 // Countdown Timer Implementation
 const eventDate = new Date('2025-09-15T09:00:00');
+let registrationClosed = false;
+
 function updateCountdown() {
   const now = new Date();
   let diff = eventDate - now;
-  if (diff < 0) diff = 0;
+  
+  // Check if event has started or passed
+  if (diff <= 0) {
+    diff = 0;
+    if (!registrationClosed) {
+      closeRegistration();
+      registrationClosed = true;
+    }
+  }
+  
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
   const minutes = Math.floor((diff / (1000 * 60)) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
+  
   if (document.getElementById('days')) document.getElementById('days').textContent = String(days).padStart(2, '0');
   if (document.getElementById('hours')) document.getElementById('hours').textContent = String(hours).padStart(2, '0');
   if (document.getElementById('minutes')) document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
   if (document.getElementById('seconds')) document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
 }
+
+function closeRegistration() {
+  // Hide registration form and related elements
+  const registrationForm = document.getElementById('registrationForm');
+  const confirmationForm = document.getElementById('confirmationForm');
+  const registrationTitle = document.getElementById('registrationTitle');
+  const awardCta = document.querySelector('.award-cta');
+  const successMessage = document.getElementById('successMessage');
+  const errorMessage = document.getElementById('errorMessage');
+  
+  if (registrationForm) registrationForm.classList.add('hidden');
+  if (confirmationForm) confirmationForm.classList.add('hidden');
+  if (successMessage) successMessage.classList.add('hidden');
+  if (errorMessage) errorMessage.classList.add('hidden');
+  
+  // Hide award CTA button
+  if (awardCta) {
+    awardCta.style.display = 'none';
+  }
+  
+  // Update title and show closed notification
+  if (registrationTitle) {
+    registrationTitle.innerHTML = 'Registration Closed';
+  }
+  
+  // Show the registration closed notification
+  const closedNotification = document.getElementById('registrationClosed');
+  if (closedNotification) {
+    closedNotification.classList.remove('hidden');
+  }
+  
+  // Update countdown label to show event status
+  const countdownLabel = document.querySelector('.countdown-label');
+  if (countdownLabel) {
+    countdownLabel.textContent = 'Event In Progress';
+  }
+}
+
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
